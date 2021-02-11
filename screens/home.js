@@ -8,6 +8,8 @@ import {
   Animated,
   Dimensions
 } from 'react-native'
+import { Provider } from 'react-native-paper'
+import { AppMenu } from '../components/menu'
 
 const HEADER_EXPANDED_HEIGHT = 300
 const HEADER_COLLAPSED_HEIGHT = 60
@@ -36,6 +38,11 @@ export default class Home extends Component {
   }
 
   render() {
+    const menuItem = [
+      { title: 'Item 1', onpress: () => {}, key: '1' },
+      { title: 'Item 2', onpress: () => {}, key: '2' }
+    ]
+
     const headerTitle = 'Favourite'
 
     const headerHeight = this.state.scrollY.interpolate({
@@ -57,53 +64,57 @@ export default class Home extends Component {
     })
 
     return (
-      <View style={styles.container}>
-        <Animated.View style={[styles.header, { height: headerHeight }]}>
-          <Animated.Text
-            style={{
-              textAlign: 'center',
-              fontSize: 18,
-              color: 'black',
-              marginTop: 28,
-              opacity: headerTitleOpacity
-            }}
-          >
-            {headerTitle}
-          </Animated.Text>
-          <Animated.Text
-            style={{
-              textAlign: 'center',
-              fontSize: 32,
-              color: 'black',
-              position: 'absolute',
-              bottom: 16,
-              left: 16,
-              opacity: heroTitleOpacity
-            }}
-          >
-            {headerTitle}
-          </Animated.Text>
-        </Animated.View>
-        <ScrollView
-          contentContainerStyle={styles.scrollContainer}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {
-                    y: this.state.scrollY
+      <Provider>
+        <View style={styles.container}>
+          <Animated.View style={[styles.header, { height: headerHeight }]}>
+            <Animated.Text
+              style={{
+                textAlign: 'center',
+                fontSize: 18,
+                color: 'black',
+                marginTop: 28,
+                opacity: headerTitleOpacity
+              }}
+            >
+              HHHHH
+            </Animated.Text>
+
+            <Animated.Text
+              style={{
+                textAlign: 'center',
+                fontSize: 32,
+                color: 'black',
+                position: 'absolute',
+                bottom: 16,
+                left: 16,
+                opacity: heroTitleOpacity
+              }}
+            >
+              {headerTitle}
+            </Animated.Text>
+          </Animated.View>
+          <ScrollView
+            contentContainerStyle={styles.scrollContainer}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      y: this.state.scrollY
+                    }
                   }
                 }
-              }
-            ],
-            { useNativeDriver: false }
-          )}
-          scrollEventThrottle={16}
-        >
-          <Text style={styles.title}>This is Title</Text>
-          <Text style={styles.content}>{str}</Text>
-        </ScrollView>
-      </View>
+              ],
+              { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+          >
+            <AppMenu menuItem={menuItem} />
+            <Text style={styles.title}>This is Title</Text>
+            <Text style={styles.content}>{str}</Text>
+          </ScrollView>
+        </View>
+      </Provider>
     )
   }
 }
@@ -118,7 +129,7 @@ const styles = StyleSheet.create({
     paddingTop: HEADER_EXPANDED_HEIGHT
   },
   header: {
-    backgroundColor: 'lightblue',
+    backgroundColor: 'rgba(107,107,107,0.5)',
     position: 'absolute',
     width: SCREEN_WIDTH,
     top: 0,
