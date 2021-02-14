@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import {
   View,
   Text,
@@ -10,23 +10,23 @@ import {
 } from 'react-native'
 import { Provider } from 'react-native-paper'
 import { AppMenu } from '../components/menu'
+import { rolem } from '../objects/str'
 
-const HEADER_EXPANDED_HEIGHT = 300
-const HEADER_COLLAPSED_HEIGHT = 60
+const HD_EXPANDED_HEIGHT = 300
+const HD_COLLAPSED_HEIGHT = 60
 
 const { width: SCREEN_WIDTH } = Dimensions.get('screen')
 
-const str = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ultrices ante. Duis vulputate lorem non tortor pharetra, aliquet aliquet leo efficitur. Ut sed rutrum nisi. Pellentesque facilisis erat sit amet mi ornare, et dapibus tortor congue. Integer vulputate magna a vehicula accumsan. Cras nec nunc consequat, volutpat felis vitae, pulvinar nibh. Vestibulum lacinia in tortor vel maximus. Suspendisse semper dolor ligula. Praesent pellentesque suscipit enim, at dictum nisl pellentesque non. Phasellus nec consectetur magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed condimentum porttitor elit ut dignissim. Nunc nec libero a orci porttitor accumsan eget sed diam. Cras dignissim, nulla sed laoreet accumsan, mi quam egestas mauris, id posuere purus lorem sagittis purus. Duis sollicitudin neque ac aliquet sollicitudin.
-In eros est, sollicitudin sit amet risus eget, porttitor pulvinar ipsum. Nulla eget quam arcu. Mauris vel odio cursus, hendrerit augue et, ultricies massa. Phasellus pharetra et libero id semper. Sed sollicitudin commodo mi, nec efficitur sem congue vitae. Ut pellentesque augue ut lacus finibus sollicitudin. Donec a auctor augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae convallis nulla. Maecenas venenatis lorem at mi commodo pharetra. Mauris finibus hendrerit magna, sit amet ultrices turpis aliquet nec. Proin et diam suscipit, sollicitudin risus ac, porta nibh.
-Aliquam pretium, elit maximus vehicula lobortis, neque dolor tempor nisl, sit amet interdum erat turpis eu metus. Sed semper libero ac diam finibus, ac interdum orci placerat. Donec nec erat ac erat rhoncus blandit. Nunc felis dui, semper eu porttitor in, porttitor vitae eros. In vel mattis est, vel molestie dui. Nulla semper nisl tempor scelerisque egestas. Duis faucibus, elit id accumsan aliquet, turpis felis scelerisque felis, quis tincidunt felis massa nec eros. Vivamus pellentesque congue velit finibus porttitor. Pellentesque eu mi lacinia sapien fermentum tincidunt sit amet eu nisl. Suspendisse pharetra ex in magna molestie venenatis.
-Suspendisse non gravida tortor. Donec tristique ipsum eget arcu aliquet molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam cursus purus eget accumsan maximus. Duis eu iaculis arcu. Donec iaculis, sem vel condimentum maximus, lectus nisl pellentesque dolor, non ullamcorper sapien lectus sed enim. Aenean et leo nisi. Nulla viverra magna id luctus fermentum. Donec et mauris placerat, mollis elit lacinia, cursus lacus. Donec aliquet libero arcu, non consectetur elit maximus sit amet. Quisque lacinia, libero et fermentum rutrum, lorem arcu tincidunt ante, sed iaculis velit tortor non lacus.
-Sed accumsan lectus laoreet mollis cursus. Phasellus sagittis vulputate erat, non tempus dui pellentesque vel. Fusce imperdiet nulla vitae mauris facilisis bibendum. Fusce vestibulum fringilla orci, sit amet euismod nunc eleifend id. Curabitur mattis dolor at odio maximus lacinia. Vivamus ornare lorem sed augue faucibus, vel volutpat lacus elementum. Suspendisse potenti.`
-
+const menuItem = [
+  { title: 'Item 1', onpress: () => {}, key: '1' },
+  { title: 'Item 2', onpress: () => {}, key: '2' }
+]
 export default class Home extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      scrollView: createRef(),
       scrollY: new Animated.Value(0)
     }
 
@@ -38,27 +38,20 @@ export default class Home extends Component {
   }
 
   render() {
-    const menuItem = [
-      { title: 'Item 1', onpress: () => {}, key: '1' },
-      { title: 'Item 2', onpress: () => {}, key: '2' }
-    ]
-
-    const headerTitle = 'Favourite'
-
     const headerHeight = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
-      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      inputRange: [0, HD_EXPANDED_HEIGHT - HD_COLLAPSED_HEIGHT],
+      outputRange: [HD_EXPANDED_HEIGHT, HD_COLLAPSED_HEIGHT],
       extrapolate: 'clamp'
     })
 
     const headerTitleOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      inputRange: [0, HD_EXPANDED_HEIGHT - HD_COLLAPSED_HEIGHT],
       outputRange: [0, 1],
       extrapolate: 'clamp'
     })
 
     const heroTitleOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      inputRange: [0, HD_EXPANDED_HEIGHT - HD_COLLAPSED_HEIGHT],
       outputRange: [1, 0],
       extrapolate: 'clamp'
     })
@@ -76,13 +69,13 @@ export default class Home extends Component {
                 opacity: headerTitleOpacity
               }}
             >
-              HHHHH
+              FAVOURITE
             </Animated.Text>
 
             <Animated.Text
               style={{
                 textAlign: 'center',
-                fontSize: 32,
+                fontSize: 24,
                 color: 'black',
                 position: 'absolute',
                 bottom: 16,
@@ -90,10 +83,11 @@ export default class Home extends Component {
                 opacity: heroTitleOpacity
               }}
             >
-              {headerTitle}
+              WELCOME TO KASET APP
             </Animated.Text>
           </Animated.View>
           <ScrollView
+            ref={this.state.scrollView}
             contentContainerStyle={styles.scrollContainer}
             onScroll={Animated.event(
               [
@@ -105,13 +99,20 @@ export default class Home extends Component {
                   }
                 }
               ],
-              { useNativeDriver: false }
+              {
+                listener: (event) => {
+                  console.log(this.state.scrollView)
+                  if (this.state.scrollY > 10)
+                    this.state.scrollView.scrollTo({ y: 100, animated: true })
+                },
+                useNativeDriver: false
+              }
             )}
             scrollEventThrottle={16}
           >
-            <AppMenu menuItem={menuItem} />
+            <AppMenu key={'1'} menuItem={menuItem} />
             <Text style={styles.title}>This is Title</Text>
-            <Text style={styles.content}>{str}</Text>
+            <Text style={styles.content}>{rolem}</Text>
           </ScrollView>
         </View>
       </Provider>
@@ -122,14 +123,14 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F55'
+    backgroundColor: '#fff'
   },
   scrollContainer: {
     padding: 16,
-    paddingTop: HEADER_EXPANDED_HEIGHT
+    paddingTop: HD_EXPANDED_HEIGHT
   },
   header: {
-    backgroundColor: 'rgba(107,107,107,0.5)',
+    backgroundColor: 'rgba(107,107,107,1)',
     position: 'absolute',
     width: SCREEN_WIDTH,
     top: 0,
